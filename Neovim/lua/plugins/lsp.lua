@@ -216,15 +216,11 @@ return {
                     skip_history = true,
                 },
             },
-
             notification = {
                 filter = vim.log.levels.DEBUG,
                 history_size = 256,
                 override_vim_notify = true,
             },
-
-
-
             integration = {
                 ["neo-tree"] = {
                     enable = true,
