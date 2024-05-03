@@ -1,6 +1,3 @@
-local function list(items, sep)
-    return table.concat(items, sep or ",")
-end
 
 local opts = {
 	-- automatically write file if changed
@@ -27,6 +24,8 @@ local opts = {
 	completeopt = 'menu,menuone,noinsert,noselect',
 	-- wheather concealable text is hidden in cursor line
 	concealcursor = "niv",
+        -- Use system clipboard
+        clipboard = "unnamedplus",
 	-- wheather conealable text is shown or hidden
 	conceallevel = 2,
 	-- highlight the screen line of the cursor
@@ -37,26 +36,29 @@ local opts = {
 	display = "lastline",
 	-- windows are automatically made the same size
 	equalalways = false,
+	expandtab = true,     --- use spaces instead of tab
 	-- file encoding for multibyte text
 	fileencoding = "utf-8",
-    -- options for 'filetype'
-    fillchars = list {
-        -- "vert:▏",
-        "vert:│",
-        "diff:╱",
-        "foldclose:",
-        "foldopen:",
-        "fold: ",
-        "msgsep:─",
-    },
+	-- options for 'filetype'
+	fillchars = {
+		-- "vert:▏",
+		vert = "│",
+		diff = "╱",
+		foldclose = "",
+		foldopen = "",
+		fold = " ",
+		msgsep = "─",
+	        eob = " ",
+	},
 	-- set to display all folds open
 	foldenable = true,
+        formatoptions = "tcrqjnl",
 	-- close folds with a level higher than this
 	foldlevel = 99,
 	-- 'foldlevel' when starting to edit a file
 	foldlevelstart = 99,
-    -- 0 is not bad
-    foldcolumn = '1',
+	-- 0 is not bad
+	foldcolumn = '1',
 	-- format of 'grepprg' output
 	grepformat = "%f:%l:%m,%m\\ %f\\ match%ts,%f",
 	-- program to use fro ":grep"
@@ -84,7 +86,13 @@ local opts = {
 	-- show <Tabl> and <EOL>
 	list = true,
 	-- Characters for displaing in list mode
-	listchars = "tab:┊ ,nbsp:+,trail:·,extends:→,precedes:←",
+	listchars = {
+		tab = "→ ",
+		eol = "↵",
+		trail = "·",
+		extends = "↷",
+		precedes = "↶",
+	},
 	-- enable the use of mouse clicks
 	mouse = "a",
 	-- change meaning of mouse buttons
@@ -97,9 +105,9 @@ local opts = {
 	numberwidth = 4,
 	-- height of the preview window
 	previewheight = 12,
-	-- ?
+	-- popup blend
 	pumblend = 10,
-	-- ?
+	-- max entries of popups
 	pumheight = 12,
 	-- timeout for 'hlsearch' and :match highlighting
 	redrawtime = 50,
@@ -123,10 +131,12 @@ local opts = {
 	showmatch = true,
 	-- message on status line to show current mode
 	showmode = false,
+        shortmess = "oOtTWIcCFS",
 	-- tells when the tab pages line is displayed
 	showtabline = 1,
 	-- minimum number of columns to scroll horizontally
 	sidescrolloff = 10,
+	scrolloff = 4,     --- Lines of context
 	-- when and how to display the sign column
 	signcolumn = 'yes',
 	-- no ignore case when pattern has uppercase
@@ -135,15 +145,14 @@ local opts = {
 	smartindent = true,
 	-- new window from split is below the current one
 	splitbelow = true,
-	-- determines scroll behaviour for split windows
-	splitkeep = "screen",
 	-- new window is put right of the current one
 	splitright = true,
 	-- commands move cursor to first non-blank in line
 	startofline = false,
+        swapfile = false,
 	-- number of spaces that <Tab> in file uses
 	tabstop = 4,
-	-- 
+	-- True color support
 	termguicolors = true,
 	-- max width of text that is being inserted
 	textwidth = 160,
@@ -153,18 +162,21 @@ local opts = {
 	timeoutlen = 500,
 	-- let vim set window title
 	title = true,
-	-- 
+	--
 	ttyfast = true,
 	-- save undo info in a file
 	undofile = true,
+	undolevels = 10000,
 	-- after this many milliseconds flush swap file
 	updatetime = 250,
 	-- specifies what to save for :mkview
 	viewoptions = "folds,cursor,curdir,slash,unix",
+        virtualedit = "block",
 	-- allows specified keys to cross line boundaries
 	whichwrap = "h,l,<,>,[,],~",
 	-- files matching these patterns are not completed
-	wildignore = ".git/**,.hg,.svn,*.pyc,*.o,*.out,*.jpg,*.jpeg,*.png,*.gif,*.zip,**/tmp/**,*.DS_Store,**/node_modules/**,**/bower_modules/**",
+	wildignore =
+	".git/**,.hg,.svn,*.pyc,*.o,*.out,*.jpg,*.jpeg,*.png,*.gif,*.zip,**/tmp/**,*.DS_Store,**/node_modules/**,**/bower_modules/**",
 	-- ignore case when completing file names and directories
 	wildignorecase = true,
 	-- mode for 'wildchar' command-line expansion
@@ -197,22 +209,23 @@ local colorscheme = require("helpers.colorscheme")
 vim.cmd.colorscheme(colorscheme)
 
 vim.diagnostic.config({
-    update_in_insert = false
+	update_in_insert = false
 })
 
 vim.opt.clipboard = "unnamedplus"
 
 if vim.fn.has("wsl") == 1 then
-  vim.g.clipboard = {
-    name = "win32yank-wsl",
-    copy = {
-      ["+"] = "win32yank.exe -i --crlf",
-      ["*"] = "win32yank.exe -i --crlf",
-    },
-    paste = {
-      ["+"] = "win32yank.exe -o --lf",
-      ["*"] = "win32yank.exe -o --lf",
-    },
-    cache_enabled = 0,
-  }
+	vim.g.clipboard = {
+		name = "win32yank-wsl",
+		copy = {
+			["+"] = "win32yank.exe -i --crlf",
+			["*"] = "win32yank.exe -i --crlf",
+		},
+		paste = {
+			["+"] = "win32yank.exe -o --lf",
+			["*"] = "win32yank.exe -o --lf",
+		},
+		cache_enabled = 0,
+	}
 end
+
