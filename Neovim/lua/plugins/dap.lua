@@ -7,6 +7,7 @@ return {
             "jay-babu/mason-nvim-dap.nvim",
             "theHamsta/nvim-dap-virtual-text",
             "nvim-telescope/telescope-dap.nvim",
+            "mxsdev/nvim-dap-vscode-js",
         }
     }
 }

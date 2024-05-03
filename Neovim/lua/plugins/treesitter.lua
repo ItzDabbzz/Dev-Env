@@ -33,7 +33,7 @@ return {
             },
             context_commentstring = {
                 enable = true,
-                enable_autocmd = false,
+                enable_autocmd = true,
                 config = {
                     typescript = "// %s",
                     css = "/* %s */",
@@ -45,7 +45,7 @@ return {
                 },
             },
             indent = {
-                enable = true,
+                enable = false,
                 disable = { "yaml", "python" },
             },
             autotag = { enable = true },

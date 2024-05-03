@@ -6,6 +6,10 @@ return {
             "L3MON4D3/LuaSnip",
             dependencies = { "rafamadriz/friendly-snippets" },
         },
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-cmdline",
         "hrsh7th/cmp-cmdline",
     },
     config = function()
@@ -30,6 +34,12 @@ return {
                 { name = 'nvim_lua' },
                 { name = "codeium" },
                 { name = "cmdline" },
+            },
+            completion = {
+                -- There are two completion styles:
+                -- `noinsert` means do not automatically insert the selected item, set it if you want to confirm item by manually pressing <cr>,
+                -- `noselect` means do not automatically select the first item, set it if you want to pressing <cr>
+                completeopt = "menu,menuone,noinsert",
             },
             experimental = {
                 -- New menu, better than the old menu
@@ -64,6 +74,9 @@ return {
                 completion = cmp.config.window.bordered(),
                 documentation = cmp.config.window.bordered(),
             },
+            performance = {
+                fetching_timeout = 150
+            },
             snippet = {
                 expand = function(args)
                     require('luasnip').lsp_expand(args.body)
@@ -74,6 +87,9 @@ return {
         -- `:` cmdline setup.
         cmp.setup.cmdline(':', {
             mapping = cmp.mapping.preset.cmdline(),
+            completion = {
+                completeopt = "menu,menuone,noselect",
+            },
             sources = cmp.config.sources({
                 { name = 'path' }
             }, {
@@ -87,8 +103,11 @@ return {
         })
 
         -- `/` cmdline setup.
-        cmp.setup.cmdline('/', {
+        cmp.setup.cmdline({ '/', '?' }, {
             mapping = cmp.mapping.preset.cmdline(),
+            completion = {
+                completeopt = "menu,menuone,noselect",
+            },
             sources = {
                 { name = 'buffer' }
             }
