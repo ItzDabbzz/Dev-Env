@@ -3,6 +3,38 @@ return {
     {
         "mbbill/undotree",
     },
+    -- Save and restore session
+    {
+        "folke/persistence.nvim",
+        event = "BufReadPre",
+        keys = {
+            {
+                "<leader>qs",
+                function()
+                    require("persistence").load()
+                end,
+                desc = "Restore Session",
+            },
+            {
+                "<leader>ql",
+                function()
+                    require("persistence").load({ last = true })
+                end,
+                desc = "Restore Last Session",
+            },
+            {
+                "<leader>qQ",
+                function()
+                    require("persistence").stop()
+                    vim.cmd.qall()
+                end,
+                desc = "Quit Without Saving Session",
+            },
+        },
+        opts = {
+            options = { "buffers", "curdir", "tabpages", "winsize", "globals", "skiprtp", "folds" },
+        },
+    },
     -- Comment with haste
     {
         "numToStr/Comment.nvim",
@@ -30,22 +62,69 @@ return {
         branch = "main",
         version = "*",
         cmd = {
-          "ToggleTerm",
-          "TermExec",
-          "ToggleTermToggleAll",
-          "ToggleTermSendCurrentLine",
-          "ToggleTermSendVisualLines",
-          "ToggleTermSendVisualSelection",
+            "ToggleTerm",
+            "TermExec",
+            "ToggleTermToggleAll",
+            "ToggleTermSendCurrentLine",
+            "ToggleTermSendVisualLines",
+            "ToggleTermSendVisualSelection",
         },
         opts = { --[[ things you want to change go here]] }
     },
-    "airblade/vim-rooter",          -- Set working directory to project root
-    "NvChad/nvim-colorizer.lua",    -- Colorize color codes
-    "petertriho/nvim-scrollbar",    -- Nice scroll bar with git integration
-    "HiPhish/rainbow-delimiters.nvim", -- Rainbow brackets
-    "tpope/vim-sleuth",             -- Detect tabstop and shiftwidth automatically
-    "tpope/vim-surround",           -- Surround stuff with the ys-, cs-, ds- commands
-    "airblade/vim-rooter",          -- Set working directory to project root
+    "airblade/vim-rooter",   -- Set working directory to project root
+    {
+        "uga-rosa/ccc.nvim", -- Colorize color codes
+        event = "User LazyFile",
+    },
+    {
+        "petertriho/nvim-scrollbar", -- Nice scroll bar with git integration
+        event = "User LazyFile",
+        opts = {
+            hide_if_all_visible = true,
+            handle = {
+                highlight = "ScrollbarHandle",
+            },
+            handlers = {
+                cursor = true,
+                diagnostic = true,
+                gitsigns = true, -- Requires gitsigns
+                search = true,   -- Requires hlslens
+            },
+            marks = {
+                Cursor = { text = "—" },
+                Search = { text = { "—", "󰇼" } },
+                Error = { text = { "—", "󰇼" } },
+                Warn = { text = { "—", "󰇼" } },
+                Info = { text = { "—", "󰇼" } },
+                Hint = { text = { "—", "󰇼" } },
+                Misc = { text = { "—", "󰇼" } },
+                GitAdd = { text = "▎" },
+                GitChange = { text = "▎" },
+                GitDelete = { text = "▁" },
+            },
+        },
+    },
+
+    -- Show context of the current cursor position
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        event = "User LazyFile",
+        opts = {
+            max_lines = 3,
+        },
+    },
+    -- Highlight different level brackets with different color
+    {
+        "HiPhish/rainbow-delimiters.nvim",
+        event = "User LazyFile",
+    },
+
+    -- Highlight matched bracket
+    {
+        "monkoose/matchparen.nvim",
+        event = "User LazyFile",
+        opts = {},
+    },
     {
         "folke/neodev.nvim",
         opts = {},
